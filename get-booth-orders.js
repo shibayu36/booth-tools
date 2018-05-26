@@ -1,5 +1,5 @@
 // Usage
-// PIXIV_ID=... PIXIV_PASSWORD=... node app.js
+// PIXIV_ID=... PIXIV_PASSWORD=... node get-booth-orders.js
 
 const puppeteer = require('puppeteer');
 const fs = require('fs');
