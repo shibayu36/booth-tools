@@ -21,7 +21,7 @@ async function getOrders(browser, page) {
       let panel = document.querySelectorAll('.manage-panel')[0];
       let name = panel.querySelector('.manage-order-shipment-summaries .u-tpg-slight-body').textContent.match(/(.+)\s+様/)[1];
       let productContainers = panel.querySelectorAll('.manage-order-content');
-      let products = Array.from(productContainers).map(c => c.querySelector('.u-tpg-slight-body').innerText.trim() + " : " + c.querySelector('.u-text-right b').innerText);
+      let products = Array.from(productContainers).map(c => c.querySelector('.u-tpg-slight-body a.nav-reverse').innerText.trim() + " : " + c.querySelector('.u-text-right b').innerText);
       return name + "\t" + products.sort().reverse().join("\t");
     });
     console.log(row);
