@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 
-const CLICKPOST_SESSION = process.env["CLICKPOST_SESSION"];
 const YAHOO_ID = process.env["YAHOO_ID"];
 const YAHOO_PASSWORD = process.env["YAHOO_PASSWORD"];
 const CARD_CVC = process.env["CARD_CVC"];
@@ -13,19 +12,16 @@ if (!(YAHOO_ID && YAHOO_PASSWORD)) {
 // 支払い待ちがなければ0、あれば1を返す
 async function payOnce(page) {
   await page.goto('https://clickpost.jp/mypage/index');
-
   await page.waitForSelector('input[value="一時保存"]');
   let listLink = await page.$('input[value="一時保存"]');
-  if (!listLink) {
-    // 支払い待ちがない
+  listLink.click();
+
+  await page.waitForNavigation({ waitUntil: "networkidle0" });
+  let firstPayment = await page.$('.home_contents table tbody input[type="submit"]');
+  if (!firstPayment) {
     return 0;
   }
-  listLink.click();
-  await page.waitForSelector('.home_contents table tbody input[type="submit"]', {
-    timeout: 30000
-  });
 
-  let firstPayment = await page.$('.home_contents table tbody input[type="submit"]');
   firstPayment.click();
   await page.waitForNavigation();
 
@@ -85,11 +81,14 @@ async function payOnce(page) {
   console.log('clickpost login finished');
 
   console.log('payment start');
+
   while (true) {
     let paymentExists = await payOnce(page);
     if (!paymentExists) {
       break;
     }
+    // 素早く決済しすぎないように待つ
+    await page.waitFor(5000);
   }
   console.log('payment finish');
 
