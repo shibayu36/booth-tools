@@ -1,8 +1,11 @@
 // Usage
 // PIXIV_ID=... PIXIV_PASSWORD=... node get-booth-orders.js
 
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
 const fs = require('fs');
+
+const pluginStealth = require("puppeteer-extra-plugin-stealth");
+puppeteer.use(pluginStealth());
 
 // 注文リスト1ページから購入情報を抜き出す
 async function getOrders(browser, page) {
@@ -34,7 +37,10 @@ async function getOrders(browser, page) {
 
 (async () => {
 
-  let browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    devtools: !!process.env["DEBUG"],
+    slowMo: 50
+  });
   let page = await browser.newPage();
 
   // loginする
@@ -44,6 +50,7 @@ async function getOrders(browser, page) {
   await page.click('#LoginComponent button[type="submit"]');
   await page.goto('https://booth.pm/users/sign_in');
   console.log("finish to login");
+
 
   // 未発送ページへ
   await page.goto('https://manage.booth.pm/orders?state=paid');
