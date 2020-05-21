@@ -1,3 +1,5 @@
+// CARD_CVC=... YAHOO_ID=... YAHOO_PASSWORD=... DEBUG=1 node pay-by-clickpost.js
+
 const puppeteer = require("puppeteer");
 
 const YAHOO_ID = process.env["YAHOO_ID"];
