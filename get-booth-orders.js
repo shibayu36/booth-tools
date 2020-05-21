@@ -53,7 +53,7 @@ async function getOrders(browser, page) {
 
   // loginする
   await page.goto(
-    "https://accounts.pixiv.net/login?view_type=popup&source=booth&return_to=https%3A%2F%2Faccounts.pixiv.net%2Fpopup.html%23https%3A%2F%2Fbooth.pm%2Fusers%2Fsign_in"
+    "https://accounts.pixiv.net/login?return_to=https%3A%2F%2Fbooth.pm%2Fusers%2Fauth%2Fpixiv&source=booth&view_type=page"
   );
   await page.type(
     '#LoginComponent input[autocomplete="username"]',
@@ -64,7 +64,7 @@ async function getOrders(browser, page) {
     process.env.PIXIV_PASSWORD
   );
   await page.click('#LoginComponent button[type="submit"]');
-  await page.goto("https://booth.pm/users/sign_in");
+  await page.waitForResponse("https://booth.pm/ja");
   console.log("finish to login");
 
   // 未発送ページへ
