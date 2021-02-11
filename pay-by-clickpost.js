@@ -32,7 +32,7 @@ async function payOnce(page) {
   let cvcInput = await page.$("#PaymentDispFormCVC");
   if (cvcInput) {
     page.type("#PaymentDispFormCVC", CARD_CVC);
-    await page.waitFor(1000);
+    await page.waitForTimeout(1000);
   }
 
   let paySubmit = await page.$("input#CompleteBtn");
@@ -97,7 +97,7 @@ async function payOnce(page) {
       break;
     }
     // 素早く決済しすぎないように待つ
-    await page.waitFor(5000);
+    await page.waitForTimeout(5000);
   }
   console.log("payment finish");
 
