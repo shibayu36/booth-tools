@@ -29,13 +29,17 @@ async function payOnce(page) {
   firstPayment.click();
   await page.waitForNavigation();
 
-  let cvcInput = await page.$("#PaymentDispFormCVC");
+  let cvcInput = await page.$("#cvv");
   if (cvcInput) {
-    page.type("#PaymentDispFormCVC", CARD_CVC);
+    page.type("#cvv", CARD_CVC);
     await page.waitForTimeout(1000);
   }
 
-  let paySubmit = await page.$("input#CompleteBtn");
+  // 規約の合意
+  const agreement = await page.click("#consent-matters-agree");
+
+  // 次へ
+  let paySubmit = await page.$("#action button");
   paySubmit.click();
   await page.waitForNavigation();
 
