@@ -29,7 +29,7 @@ while (my @rows = $it->()) {
         'お届け先住所1行目', 'お届け先住所2行目', 'お届け先住所3行目', 'お届け先住所4行目', '内容品'
     ));
     for my $row (@rows) {
-        say { $fh } encode('cp932', join(
+        say { $fh } encode('shiftjis', join(
             ',',
             $row->[8],
             $row->[12],
