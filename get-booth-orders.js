@@ -56,14 +56,14 @@ async function getOrders(browser, page) {
     "https://accounts.pixiv.net/login?return_to=https%3A%2F%2Fbooth.pm%2Fusers%2Fauth%2Fpixiv&source=booth&view_type=page"
   );
   await page.type(
-    '#LoginComponent input[autocomplete="username"]',
+    'input[autocomplete="username"]',
     process.env.PIXIV_ID
   );
   await page.type(
-    '#LoginComponent input[autocomplete="current-password"]',
+    'input[autocomplete="current-password"]',
     process.env.PIXIV_PASSWORD
   );
-  await page.click('#LoginComponent button[type="submit"]');
+  await page.click('button[type="submit"]:nth-of-type(1)');
   await page.waitForResponse("https://booth.pm/ja");
   console.log("finish to login");
 
