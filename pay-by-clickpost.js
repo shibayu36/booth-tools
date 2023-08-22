@@ -16,9 +16,9 @@ async function payOnce(page) {
   await page.goto("https://clickpost.jp/mypage/index");
   await page.waitForSelector('input[value="一時保存"]');
   let listLink = await page.$('input[value="一時保存"]');
-  listLink.click();
+  await listLink.click();
 
-  await page.waitForNavigation({ waitUntil: "networkidle0" });
+  await page.waitForSelector('.home_contents', { visible: true });
   let firstPayment = await page.$(
     '.home_contents table tbody input[type="submit"]'
   );
@@ -26,7 +26,7 @@ async function payOnce(page) {
     return 0;
   }
 
-  firstPayment.click();
+  await firstPayment.click();
   await page.waitForNavigation();
 
   let cvcInput = await page.$("#cvv");
@@ -52,6 +52,7 @@ async function payOnce(page) {
 
 (async () => {
   const browser = await puppeteer.launch({
+    headless: false,
     devtools: !!process.env["DEBUG"],
     slowMo: 50,
   });
@@ -63,13 +64,13 @@ async function payOnce(page) {
     await page.goto("https://login.yahoo.co.jp/config/login", {
       waitUntil: "networkidle0",
     });
-    await page.type('input[name="login"]', YAHOO_ID);
-    let nextLoginLink = await page.$("#btnNext");
+    await page.type('form[name="login_form"] input#login_handle', YAHOO_ID);
+    let nextLoginLink = await page.$('form[name="login_form"] button:nth-of-type(1)');
     nextLoginLink.click();
 
-    await page.waitForSelector('input[name="passwd"]', { visible: true });
-    await page.type('input[name="passwd"]', YAHOO_PASSWORD);
-    let loginLink = await page.$("#btnSubmit");
+    await page.waitForSelector('input[name="password"]', { visible: true });
+    await page.type('input[name="password"]', YAHOO_PASSWORD);
+    let loginLink = await page.$('form[name="login_form"] button[type="submit"]');
     loginLink.click();
     await page.waitForNavigation({
       timeout: 60000,
@@ -81,15 +82,8 @@ async function payOnce(page) {
 
   // clickpost login
   {
+    await page.goto("https://clickpost.jp/yahoo_logins/authorizing")
     await page.goto("https://clickpost.jp/mypage/index");
-
-    let yLoginButton = await page.$('.logInBtn a[href="/auth/yconnect"]');
-    yLoginButton.click();
-
-    await page.waitForSelector('button[type="submit"]');
-    let submitButton = await page.$('button[type="submit"]');
-    submitButton.click();
-    await page.waitForNavigation();
   }
   console.log("clickpost login finished");
 
