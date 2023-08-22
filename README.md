@@ -15,9 +15,10 @@ carton install
 ## Usage
 
 ### 購入商品リストを出す
-```
-DEBUG=1 PIXIV_ID=... PIXIV_PASSWORD=... node get-booth-orders.js
-```
+- boothのhttps://manage.booth.pm/orders?state=paid から宛名印刷用CSVをダウンロード
+- CSVをスプレッドシートにインポート
+- 氏名と商品番号の列だけを表示
+- ナンバー付けて逆順に(申し込み順になるように)
 
 ### boothの宛名リストからクリックポストの
 https://manage.booth.pm/orders?state=paid から「宛名印刷用CSV」をダウンロード。
