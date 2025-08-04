@@ -64,13 +64,13 @@ async function payOnce(page) {
     await page.goto("https://login.yahoo.co.jp/config/login", {
       waitUntil: "networkidle0",
     });
-    await page.type('form[name="login_form"] input#login_handle', YAHOO_ID);
-    let nextLoginLink = await page.$('form[name="login_form"] button:nth-of-type(1)');
+    await page.type('input[name="handle"]', YAHOO_ID);
+    let nextLoginLink = await page.$('#main > div > div > div > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(2) > button');
     nextLoginLink.click();
 
     await page.waitForSelector('input[name="password"]', { visible: true });
     await page.type('input[name="password"]', YAHOO_PASSWORD);
-    let loginLink = await page.$('form[name="login_form"] button[type="submit"]');
+    let loginLink = await page.$('#main > div > div > div > div:nth-child(1) > div > div:nth-child(2) > form > div.riff-flex.riff-flex-col > div:nth-child(1) > div > div:nth-child(3) > button');
     loginLink.click();
     await page.waitForNavigation({
       timeout: 60000,
