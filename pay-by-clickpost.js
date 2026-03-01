@@ -26,6 +26,7 @@ async function payOnce(page) {
     return 0;
   }
 
+  console.log("before waitForNavigation: firstPayment.click");
   await firstPayment.click();
   await page.waitForNavigation();
 
@@ -40,10 +41,12 @@ async function payOnce(page) {
 
   // 次へ
   let paySubmit = await page.$("#action button");
+  console.log("before waitForNavigation: paySubmit.click");
   paySubmit.click();
   await page.waitForNavigation();
 
   let confirmSubmit = await page.$('input[value="支払手続き確定"]');
+  console.log("before waitForNavigation: confirmSubmit.click");
   confirmSubmit.click();
   await page.waitForNavigation();
 
@@ -90,7 +93,14 @@ async function payOnce(page) {
   console.log("payment start");
 
   while (true) {
-    let paymentExists = await payOnce(page);
+    let paymentExists;
+    try {
+      paymentExists = await payOnce(page);
+    } catch (e) {
+      await page.screenshot({ path: "tmp/error-screenshot.png", fullPage: true });
+      console.error("スクリーンショットを tmp/error-screenshot.png に保存しました");
+      throw e;
+    }
     if (!paymentExists) {
       break;
     }
